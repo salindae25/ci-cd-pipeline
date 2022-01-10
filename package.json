@@ -1,0 +1,15 @@
+{
+  "name": "ci-cd-pipeline",
+  "version": "1.0.0",
+  "description": "test out npm tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gh_self:salindae25/ci-cd-pipeline.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
