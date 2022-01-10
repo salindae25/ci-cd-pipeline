@@ -1,6 +1,6 @@
 {
   "name": "ci-cd-pipeline",
-  "version": "ciCdPipeline-1.0.1-beta",
+  "version": "NaN.1.0:1",
   "description": "test out npm tools",
   "main": "index.js",
   "scripts": {
