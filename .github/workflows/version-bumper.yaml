@@ -19,10 +19,12 @@ jobs:
         uses: PaulHatch/semantic-version@v4.0.2
         with:
           branch: develop
-          tag_prefix: "ciCdPipeline-"
+          tag_prefix: "v"
           major_pattern: "BREAKING CHANGE:"
+          namespace: "ciCdPipeline"
           minor_pattern: "feat:"
           format: "v${major}.${minor}.${patch}-prerelease${increment}"
+          bump_each_commit: false
 
       - name: Create Release
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
