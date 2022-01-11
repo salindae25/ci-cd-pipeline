@@ -27,9 +27,8 @@ jobs:
           branch: develop
           tag_prefix: "v"
           major_pattern: "BREAKING CHANGE:"
-          namespace: "ciCdPipeline"
           minor_pattern: "feat:"
-          format: "v${major}.${minor}.${patch}-QA-${increment}"
+          format: "v${major}.${minor}.${patch}-QA${increment}"
           bump_each_commit: false
 
       - name: Create Release
