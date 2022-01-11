@@ -1,6 +1,6 @@
 {
     "scheme": "custom",
-    "schemeDefinition": "major.minor.build[:patch]",
+    "schemeDefinition": "ciCdPipeline-major.minor.build[:patch]",
     "versionFile": "./package.json",
     "files": [
         "./version-list.json"
