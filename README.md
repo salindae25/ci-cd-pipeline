@@ -1,113 +1,43 @@
 ## Example Usage
 
-With options file
+workflow file using PaulHatch/semantic-version
 
 ```yaml
-name: Manage versions
-
-on: [push]
-
-jobs:
-  bump:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checkout action is required
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12"
-      - name: Bump Versions
-        uses: michmich112/version-bumper@master
-        with:
-          options-file: "./examples/example-options-full.json"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-```
-
-option file
-
-```json
-{
-  "scheme": "semantic",
-
-  // file where the current version can be found
-  "versionFile": "./package.json",
-  "files": [
-    {
-      "path": // path to file containing version to be updated
-      "line": // optional line number if needed
-    }
-  ],
-  "rules": [
-    {
-      "trigger": "commit",
-      "branch": "hotfix",
-      "bump": "build"
-    },
-    {
-      "trigger": "commit",
-      "bump": "minor",
-      "branch": "master",
-      "reset": "build"
-    },
-    {
-      "trigger": "commit",
-      "bump": "major",
-      "branch": "release",
-      "reset": [
-        "minor",
-        "build"
-      ]
-    }
-  ]}
-```
-
-Without options file
-
-```yaml
-name: Manage versions
-
-on: [push, pull_request]
+name: develop
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
-  bump:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout action is required
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          node-version: "12"
-      - name: Bump Versions
-        uses: michmich112/version-bumper@master
+          # Fetch all commits
+          fetch-depth: 0
+
+      - name: Semantic versioning
+        id: versioning
+        uses: PaulHatch/semantic-version@v4.0.2
         with:
-          scheme: semantic
-          username: DoomGuy
-          email: guy@doom.id
-          version-file: "./package.json"
-          files: >
-            [
-              "./version-list.json"
-            ]
-          rules: >
-            [{
-              "trigger":"commit",
-              "branch": "staging",
-              "suffix": "-beta",
-              "bump":"build"
-            },{
-              "trigger": "pull-request",
-              "destBranch": "main",
-              "suffix": "-rc",
-              "bump": "minor",
-              "tag": true
-            }, {
-              "trigger":"commit",
-              "branch":"release",
-              "bump":"major",
-              "tag": true,
-              "reset":["minor","build"]
-            }]'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          branch: develop
+          tag_prefix: "v"
+          major_pattern: "BREAKING CHANGE:"
+          namespace: "ciCdPipeline"
+          minor_pattern: "feat:"
+          format: "v${major}.${minor}.${patch}-QA-${increment}"
+          bump_each_commit: false
+
+      - name: Create Release
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ steps.versioning.outputs.version }}
+          release_name: ${{ steps.versioning.outputs.version }}
+          prerelease: true
 ```
