@@ -1,8 +1,7 @@
-name: develop
+name: staging
 on:
   push:
-    branches:
-      - develop
+    branches: [release/*]
 
 jobs:
   build:
@@ -18,11 +17,11 @@ jobs:
         id: versioning
         uses: PaulHatch/semantic-version@v4.0.2
         with:
-          branch: develop
+          branch: release/*
           tag_prefix: "v"
           major_pattern: "BREAKING CHANGE:"
           minor_pattern: "feat:"
-          format: "v${major}.${minor}.${patch}-QA${increment}"
+          format: "v${major}.${minor}.${patch}-UAT${increment}"
           bump_each_commit: false
 
       - name: Create Release
