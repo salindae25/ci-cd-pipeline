@@ -1,6 +1,7 @@
 ## Example Usage
 
 workflow file using PaulHatch/semantic-version
+with some modification
 
 ```yaml
 name: develop
